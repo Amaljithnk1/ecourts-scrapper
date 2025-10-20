@@ -241,7 +241,15 @@ def courts(state_code: str, dist_code: str, complex_code: str) -> list[dict]:
             if not val or val.lower() in ("0", "null", "undefined"):
                 continue
             if "^" in val:
-                out.append({"code": val, "name": o.text.strip()})
+                name = o.text.strip()
+                name = re.sub(r'<[^>]*>', '', name)
+                name = re.sub(r',\s*"[^"]*":\s*[^,}]*', '', name)
+                name = re.sub(r'\{\s*".*?\}\s*$', '', name)
+                name = re.sub(r'\s+', ' ', name)
+                name = name.strip()
+                
+                if name:
+                    out.append({"code": val, "name": name})
         return out
 
     def _cause(tok):
@@ -278,7 +286,7 @@ def courts(state_code: str, dist_code: str, complex_code: str) -> list[dict]:
     except Exception as e:
         print(f"✗ Error fetching courts: {e}")
         return []
-
+    
 # ====================================================================
 # Test
 # ====================================================================

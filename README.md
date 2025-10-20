@@ -1,6 +1,6 @@
 # eCourts Scraper
 
-Unlisted demo video: https://youtu.be/your-demo-link
+demo video: https://youtu.be/demo-link
 
 A live cause-list scraper with a small React UI and a Flask API.
 
@@ -49,7 +49,7 @@ API at http://localhost:5000/api
 2. Pick date (DD-MM-YYYY in payload)
 3. Click Refresh to load captcha, type it, then:
    - Fetch: show cause list table and filters
-   - PDF: download single court's list
+   - PDF: download single court's list (remember to install WeasyPrint or wkhtmltopdf(need to set path))
    - ZIP: download all courts in the complex
 
 Note: The site uses captcha; refresh invalidates the previous code.

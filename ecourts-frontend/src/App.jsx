@@ -709,8 +709,10 @@ export default function ECourtsScraper() {
                   <tr>
                     <th className="px-4 py-3 text-left">Sr No</th>
                     <th className="px-4 py-3 text-left">Cases</th>
+                    <th className="px-4 py-3 text-left">Next Hearing Date</th>
                     <th className="px-4 py-3 text-left">Party Name</th>
                     <th className="px-4 py-3 text-left">Advocate</th>
+                    
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -718,6 +720,7 @@ export default function ECourtsScraper() {
                     <tr key={i} className="hover:bg-emerald-50 transition">
                       <td className="px-4 py-3">{c.serial_number}</td>
                       <td className="px-4 py-3 font-medium">{c.case_number}</td>
+                      <td className="px-4 py-3">{c.next_hearing}</td>
                       <td className="px-4 py-3">{c.parties}</td>
                       <td className="px-4 py-3">{c.purpose}</td>
                     </tr>

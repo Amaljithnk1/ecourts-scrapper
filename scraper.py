@@ -924,6 +924,7 @@ class eCourtsScraper:
 
         return case if case["case_number"] else None
 
+
     def _parse_cause_list(self, html: str, date: str) -> List[Dict]:
         """Parse cause list from HTML response."""
         soup = BeautifulSoup(html, "lxml")
@@ -934,17 +935,33 @@ class eCourtsScraper:
                 cols = row.find_all("td")
                 if len(cols) < 2:
                     continue
-                    
+
+                case_col_text = cols[1].get_text(strip=True)
+            
+                lines = case_col_text.split('Next hearing date:')
+                case_number = lines[0].strip()
+                case_number = re.sub(r'View\s*', '', case_number).strip()
+                
+                next_hearing = ""
+                if len(lines) > 1:
+                    next_hearing = lines[1].strip()
+                    next_hearing = re.sub(r'^-\s*', '', next_hearing).strip()
+                
+                if not case_number:
+                    continue
+               
                 cases.append({
                     "serial_number": cols[0].get_text(strip=True) or str(idx),
-                    "case_number": cols[1].get_text(strip=True),
+                    "case_number": case_number,
                     "parties": cols[2].get_text(strip=True) if len(cols) > 2 else "",
                     "purpose": cols[3].get_text(strip=True) if len(cols) > 3 else "",
                     "court_name": cols[4].get_text(strip=True) if len(cols) > 4 else "",
+                    "next_hearing": next_hearing,
                     "date": date,
                 })
                 
         return cases
+
 
     def _is_today(self, ds: str) -> bool:
         parsed = self._parse_date(ds)
