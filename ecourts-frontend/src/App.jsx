@@ -709,22 +709,38 @@ export default function ECourtsScraper() {
                   <tr>
                     <th className="px-4 py-3 text-left">Sr No</th>
                     <th className="px-4 py-3 text-left">Cases</th>
-                    <th className="px-4 py-3 text-left">Next Hearing Date</th>
                     <th className="px-4 py-3 text-left">Party Name</th>
                     <th className="px-4 py-3 text-left">Advocate</th>
-                    
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {rows.map((c, i) => (
-                    <tr key={i} className="hover:bg-emerald-50 transition">
-                      <td className="px-4 py-3">{c.serial_number}</td>
-                      <td className="px-4 py-3 font-medium">{c.case_number}</td>
-                      <td className="px-4 py-3">{c.next_hearing}</td>
-                      <td className="px-4 py-3">{c.parties}</td>
-                      <td className="px-4 py-3">{c.purpose}</td>
-                    </tr>
-                  ))}
+                <tbody>
+                  {rows.map((c, i) => {
+                    const prevSection = i > 0 ? rows[i - 1].section : null;
+                    const showSection = c.section && c.section !== prevSection;
+                    
+                    return (
+                      <React.Fragment key={i}>
+                        {showSection && (
+                          <tr>
+                            <td colSpan={4} className="px-4 py-2 bg-blue-50 text-blue-700 font-semibold border-t-2 border-blue-200">
+                              {c.section}
+                            </td>
+                          </tr>
+                        )}
+                        <tr className="hover:bg-emerald-50 transition border-b border-gray-200">
+                          <td className="px-4 py-3">{c.serial_number}</td>
+                          <td className="px-4 py-3">
+                            <div className="font-medium">{c.case_number}</div>
+                            {c.next_hearing && (
+                              <div className="text-xs text-gray-600 mt-1">Next hearing date: {c.next_hearing}</div>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 whitespace-pre-line leading-relaxed">{c.parties}</td>
+                          <td className="px-4 py-3 whitespace-pre-line leading-relaxed">{c.purpose}</td>
+                        </tr>
+                      </React.Fragment>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

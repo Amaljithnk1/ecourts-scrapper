@@ -929,10 +929,19 @@ class eCourtsScraper:
         """Parse cause list from HTML response."""
         soup = BeautifulSoup(html, "lxml")
         cases = []
+        current_section = ""
 
         for table in soup.find_all("table"):
-            for idx, row in enumerate(table.find_all("tr")[1:], 1):
+            for row in table.find_all("tr"):
                 cols = row.find_all("td")
+                if not cols:
+                    continue
+
+                colspan = cols[0].get("colspan")
+                if colspan and int(colspan) > 4:
+                    current_section = cols[0].get_text(strip=True)
+                    continue
+
                 if len(cols) < 2:
                     continue
 
@@ -951,10 +960,11 @@ class eCourtsScraper:
                     continue
                
                 cases.append({
-                    "serial_number": cols[0].get_text(strip=True) or str(idx),
+                    "serial_number": cols[0].get_text(strip=True) or "",
                     "case_number": case_number,
-                    "parties": cols[2].get_text(strip=True) if len(cols) > 2 else "",
-                    "purpose": cols[3].get_text(strip=True) if len(cols) > 3 else "",
+                    "parties": cols[2].get_text(separator="\n", strip=True) if len(cols) > 2 else "",
+                    "purpose": cols[3].get_text(separator="\n", strip=True) if len(cols) > 3 else "",
+                    "section": current_section,
                     "court_name": cols[4].get_text(strip=True) if len(cols) > 4 else "",
                     "next_hearing": next_hearing,
                     "date": date,
