@@ -54,23 +54,6 @@ API at http://localhost:5000/api
 
 Note: The site uses captcha; refresh invalidates the previous code.
 
-## API quick test
-
-Health
-```
-GET http://localhost:5000/api/health
-```
-
-Cause list
-```
-POST http://localhost:5000/api/causelist
-Body: { "state_code": "4", "dist_code": "3", "court_complex_code": "1040029", "court_code": "2^7", "date": "01-11-2025", "case_type": "civ", "captcha_code": "abc123" }
-```
-
-Captcha image
-```
-GET http://localhost:5000/api/captcha
-```
 
 ## Optional: CLI
 
